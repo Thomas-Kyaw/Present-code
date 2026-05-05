@@ -58,3 +58,14 @@ export interface ItemPayload {
   categoryId?: unknown;
   supplierId?: unknown;
 }
+
+export interface Warehouse {
+  id: number;
+  name: string;
+  location: string;
+}
+
+export interface WarehousePayload {
+  name?: unknown;
+  location?: unknown;
+}

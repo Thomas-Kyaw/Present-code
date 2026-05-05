@@ -626,6 +626,93 @@
       ]
     },
     {
+      "name": "06 Warehouse",
+      "item": [
+        {
+          "name": "Create Warehouse",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"{{warehouseName}}\",\n  \"location\": \"{{warehouseLocation}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/warehouses",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "warehouses"]
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test(\"warehouse status is 201\", function () {",
+                "  pm.response.to.have.status(201);",
+                "});",
+                "var warehouse = pm.response.json();",
+                "pm.collectionVariables.set(\"warehouseId\", warehouse.id);",
+                "pm.test(\"warehouse name matches\", function () {",
+                "  pm.expect(warehouse.name).to.eql(pm.collectionVariables.get(\"warehouseName\"));",
+                "});"
+              ],
+              "type": "text/javascript"
+            }
+          }]
+        },
+        {
+          "name": "Get Warehouse By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/warehouses/{{warehouseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "warehouses", "{{warehouseId}}"]
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test(\"warehouse fetch status is 200\", function () {",
+                "  pm.response.to.have.status(200);",
+                "});",
+                "pm.test(\"warehouse id matches\", function () {",
+                "  var warehouse = pm.response.json();",
+                "  pm.expect(String(warehouse.id)).to.eql(String(pm.collectionVariables.get(\"warehouseId\")));",
+                "});"
+              ],
+              "type": "text/javascript"
+            }
+          }]
+        },
+        {
+          "name": "Delete Warehouse",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/warehouses/{{warehouseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "warehouses", "{{warehouseId}}"]
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test(\"warehouse delete status is 204\", function () {",
+                "  pm.response.to.have.status(204);",
+                "});"
+              ],
+              "type": "text/javascript"
+            }
+          }]
+        }
+      ]
+    },
+    {
       "name": "99 Cleanup",
       "item": [
         {
@@ -764,6 +851,18 @@
     },
     {
       "key": "inventoryId",
+      "value": ""
+    },
+    {
+      "key": "warehouseName",
+      "value": "Central Warehouse"
+    },
+    {
+      "key": "warehouseLocation",
+      "value": "Block A"
+    },
+    {
+      "key": "warehouseId",
       "value": ""
     }
   ]
